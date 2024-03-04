@@ -1,10 +1,12 @@
 import Form from "@/app/components/password/Form";
-import React from "react";
+import React, { Suspense } from "react";
 
 export default function Page() {
   return (
     <div className="w-screen h-screen flex justify-center items-center">
-      <Form />
+      <Suspense>
+        <Form />
+      </Suspense>
     </div>
   );
 }
