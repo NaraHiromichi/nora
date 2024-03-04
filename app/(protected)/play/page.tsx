@@ -26,7 +26,7 @@ export default function Page() {
   const [shouldDisplay, setShouldDisplay] = useState(true);
   console.log(expression, "expression");
   const fetchExpression = () => {
-    fetch("/api/generateRandomExpression")
+    fetch("/api/generateRandomExpression", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         setExpression(JSON.parse(data));
