@@ -7,3 +7,5 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json(randomExpression);
 }
+
+export const dynamic = "force-dynamic";
