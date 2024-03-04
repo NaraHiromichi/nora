@@ -8,7 +8,7 @@ const updateForLoser = () => {
   fetch("/api/updateLoserPoints");
 };
 
-const renderTime = ({ remainingTime }: { remainingTime: any }) => {
+const RenderTime = ({ remainingTime }: { remainingTime: any }) => {
   const currentTime = useRef(remainingTime);
   const prevTime = useRef(null);
   const isNewTimeFirstTick = useRef(false);
@@ -75,7 +75,7 @@ function Countdown({
             }
           }}
         >
-          {renderTime}
+          {RenderTime}
         </CountdownCircleTimer>
       </div>
     </>

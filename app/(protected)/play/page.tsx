@@ -17,7 +17,7 @@ interface Expression {
   possibleAnswers: PossibleAnswer[];
 }
 
-const page = () => {
+export default function Page() {
   const [key, setKey] = useState(makeid(5));
   const [remainingTime, setRemainingTime] = useState(10);
   const [expression, setExpression] = useState<Expression | null>();
@@ -126,6 +126,4 @@ const page = () => {
       </div>
     </div>
   );
-};
-
-export default page;
+}

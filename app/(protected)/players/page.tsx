@@ -3,7 +3,7 @@ import { getAllUser } from "@/data/user";
 import React from "react";
 import { User } from "@prisma/client";
 
-const page = async () => {
+export default async function Page() {
   const users: User[] | null = await getAllUser();
   return (
     <div className="w-[90vw] max-w-[800px] mx-auto [&>*:nth-child(odd)]:bg-main [&>*:nth-child(even)]:bg-secondary">
@@ -22,6 +22,7 @@ const page = async () => {
         }
         return (
           <Player
+            key={user.id}
             isPlayerLoser={isPlayerLoser}
             name={user.name}
             level={level}
@@ -32,6 +33,4 @@ const page = async () => {
       })}
     </div>
   );
-};
-
-export default page;
+}

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Boxes } from "../ui/background-boxes";
-import { cn } from "@/app/utils/cn";
+import { cn } from "@/lib/utils/cn";
 
 export default function BackgroundBoxes() {
   return (

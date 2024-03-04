@@ -1,12 +1,10 @@
 import Form from "@/app/components/password/Form";
 import React from "react";
 
-const page = () => {
+export default function Page() {
   return (
     <div className="w-screen h-screen flex justify-center items-center">
       <Form />
     </div>
   );
-};
-
-export default page;
+}

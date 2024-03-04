@@ -5,8 +5,6 @@ import { BackgroundGradientAnimation } from "@/app/components/ui/background-grad
 import { useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 
-const page = () => {
+export default function Page() {
   return <NewVerification />;
-};
-
-export default page;
+}

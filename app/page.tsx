@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import { TypewriterEffect } from "@/app/components/ui/typewriter-effect";
 
-const page = () => {
+export default function Page() {
   const router = useRouter();
   const words = [
     {
@@ -53,6 +53,4 @@ const page = () => {
       </div>
     </div>
   );
-};
-
-export default page;
+}
