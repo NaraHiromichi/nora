@@ -26,6 +26,7 @@ export default function Page() {
   const [shouldDisplay, setShouldDisplay] = useState(true);
   console.log(expression, "expression");
   const fetchExpression = () => {
+    console.log("fetchExpression triggered!");
     fetch("/api/generateRandomExpression", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
@@ -112,9 +113,9 @@ export default function Page() {
                       updateForLoser();
                       return;
                     }
+                    fetchExpression();
                     setIsNewgame(true);
                     setIsWrong(false);
-                    fetchExpression();
                     setKey(makeid(5));
                     updateForPro();
                   }}
