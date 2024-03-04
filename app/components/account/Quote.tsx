@@ -1,15 +1,28 @@
 import React from "react";
 
-const Quote = () => {
+interface RandomQuote {
+  text: string;
+  number: string;
+  found: true;
+  type: string;
+}
+
+const Quote = async () => {
+  const randomQuote = await fetch("http://numbersapi.com/random/math", {
+    headers: { "Content-Type": "application/json" },
+  })
+    .then((data) => {
+      return data.json();
+    })
+    .then((data: RandomQuote) => data);
   return (
-    <div className="w-[90vw] mx-auto mt-4 text-primary text-base font-bold">
+    <div className="w-[90vw] max-w-[800px] mx-auto mt-4 text-primary text-base font-bold">
       <div className="w-full min-h-28 max-h-40 p-2 flex text-center items-center rounded-md bg-main">
-        &quot;Your self-worth is determined by you. You don't have to depend on
-        someone telling you who you are.&quot;
+        {randomQuote && randomQuote.text}
       </div>
-      <span className="w-full mt-3 pr-1 flex justify-end items-center underline">
+      {/* <span className="w-full mt-3 pr-1 flex justify-end items-center underline">
         Beyoncé
-      </span>
+      </span> */}
     </div>
   );
 };
