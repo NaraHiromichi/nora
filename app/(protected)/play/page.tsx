@@ -24,6 +24,7 @@ export default function Page() {
   const [isWrong, setIsWrong] = useState<boolean>(false);
   const [isNewGame, setIsNewgame] = useState(false);
   const [shouldDisplay, setShouldDisplay] = useState(true);
+  console.log(expression, "expression");
   const fetchExpression = () => {
     fetch("/api/generateRandomExpression")
       .then((res) => res.json())
