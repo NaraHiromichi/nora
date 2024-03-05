@@ -22,4 +22,5 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     subject: "Confirm your email",
     html: `<p>Click <a href="${confirmLink}">here to confirm your password</a></p>`,
   });
+  console.log("email:", email, "token", token, "emailFrom", EmailFrom)
 };
