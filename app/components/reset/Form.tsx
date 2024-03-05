@@ -7,6 +7,7 @@ import { resetSchema } from "@/schemas";
 import { reset } from "@/actions/reset";
 import FormError from "./FormError";
 import FormSuccess from "./FormSuccess";
+import LoadingDots from "../LoadingDots";
 const Form = () => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
@@ -46,7 +47,7 @@ const Form = () => {
         type="submit"
         disabled={isPending}
       >
-        Send email
+        {isPending ? <LoadingDots /> : "Send email"}
       </button>
       {error && <FormError message={error} />}
       {success && <FormSuccess message={success} />}

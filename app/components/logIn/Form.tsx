@@ -10,6 +10,7 @@ import FormError from "./FormError";
 import FormSuccess from "./FormSuccess";
 import { signIn } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import LoadingDots from "../LoadingDots";
 const Form = () => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
@@ -59,7 +60,7 @@ const Form = () => {
         type="submit"
         disabled={isPending}
       >
-        Sign in
+        {isPending ? <LoadingDots /> : "Sign in"}
       </button>
       <button
         type="button"

@@ -8,6 +8,7 @@ import FormError from "./FormError";
 import FormSuccess from "./FormSuccess";
 import { newPassword } from "@/actions/new-password";
 import { redirect, useSearchParams } from "next/navigation";
+import LoadingDots from "../LoadingDots";
 const Form = () => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
@@ -52,7 +53,7 @@ const Form = () => {
         type="submit"
         disabled={isPending}
       >
-        Reset Password
+        {isPending ? <LoadingDots /> : "Reset Password"}
       </button>
       {error && <FormError message={error} />}
       {success && <FormSuccess message={success} />}

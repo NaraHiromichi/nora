@@ -10,6 +10,7 @@ import FormError from "./FormError";
 import FormSuccess from "./FormSuccess";
 import { signIn } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import LoadingDots from "../LoadingDots";
 const Form = () => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
@@ -64,7 +65,7 @@ const Form = () => {
         className="w-full h-11 text-primary font-bold border-4 border-main rounded-lg bg-main"
         type="submit"
       >
-        Create Account
+        {isPending ? <LoadingDots /> : "Create account"}
       </button>
       <button
         type="button"
