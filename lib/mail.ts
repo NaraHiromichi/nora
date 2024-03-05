@@ -27,9 +27,6 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     if(error){
       console.log(error)
     }
-    if(error?.message){
-      console.log(error.message)
-    }
   }
   // await resend.emails.send({
   //   from: EmailFrom,
