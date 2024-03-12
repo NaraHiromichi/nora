@@ -1,4 +1,3 @@
-import { getRandomArithmeticQuestion } from "@/game-engine/randomMaths";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
