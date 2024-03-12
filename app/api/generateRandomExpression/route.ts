@@ -1,8 +1,8 @@
-import { getRandomArithmeticQuestion } from "@/game-engine/randomMaths";
+import { generateReadyQuestion } from "@/game-engine/randomMaths";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const randomExpression = JSON.stringify(getRandomArithmeticQuestion());
+  const randomExpression = await generateReadyQuestion();
   console.log(randomExpression);
 
   return NextResponse.json(randomExpression);

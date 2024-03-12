@@ -4,6 +4,7 @@ import { BackgroundGradient } from "../../components/ui/background-gradient";
 import { Button } from "../../components/ui/moving-border";
 import Countdown from "../../components/Countdown";
 import { useSession } from "next-auth/react";
+import { Question } from "@/game-engine/randomMaths";
 interface PossibleAnswer {
   id: number;
   num: number;
@@ -20,7 +21,7 @@ interface Expression {
 export default function Page() {
   const [key, setKey] = useState(makeid(5));
   const [remainingTime, setRemainingTime] = useState(10);
-  const [expression, setExpression] = useState<Expression | null>();
+  const [expression, setExpression] = useState<Question | null>();
   const [isWrong, setIsWrong] = useState<boolean>(false);
   const [isNewGame, setIsNewgame] = useState(false);
   const [shouldDisplay, setShouldDisplay] = useState(true);
@@ -30,8 +31,7 @@ export default function Page() {
     fetch("/api/generateRandomExpression", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
-        setExpression(JSON.parse(data));
-        console.log(JSON.parse(data));
+        setExpression(data);
       });
     setShouldDisplay(true);
   };
@@ -100,14 +100,7 @@ export default function Page() {
                   borderRadius="1.75rem"
                   className=" bg-zinc-900 text-lg text-primary font-bold border-slate-800"
                   onClick={() => {
-                    if (answer.num !== expression.answer) {
-                      console.log(
-                        "btn: ",
-                        answer.num,
-                        "Ans: ",
-                        expression.answer,
-                        answer.num !== expression.answer
-                      );
+                    if (answer.isCorrect === false) {
                       setIsWrong(true);
                       setShouldDisplay(false);
                       updateForLoser();
@@ -120,7 +113,7 @@ export default function Page() {
                     updateForPro();
                   }}
                 >
-                  {answer.num}
+                  {answer.answer}
                 </Button>
               );
             })

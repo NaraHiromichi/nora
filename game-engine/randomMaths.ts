@@ -1,95 +1,155 @@
-import { NextRequest, NextResponse } from "next/server";
+export type Sign = "+" | "-" | "*" | "/";
+export type FirstStepResult = {
+  sign: Sign;
+  first: number;
+  second: number;
+  answer: number;
+};
+export type PossibleAnswer = {
+  id: number;
+  answer: number;
+  isCorrect: boolean;
+};
 
-interface responseJSON {
+export type Question = {
+  sign: Sign;
   first_number: number;
   second_number: number;
-  operator: mathOperators;
   question: string;
-  answer: number;
-}
-type mathOperators = "+" | "-" | "*" | "/";
+  possibleAnswers: PossibleAnswer[];
+};
 
-const operators: Array<mathOperators> = ["+", "-", "*", "/"];
-const numbers: Array<number> = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-function getRandomIntInclusive(min: number, max: number) {
-  min = Math.ceil(min);
-  max = Math.floor(max - 1);
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-function getRandomOperator(
-  operatorsArray: Array<mathOperators>
-): mathOperators {
-  const randomPosition = getRandomIntInclusive(0, operatorsArray.length);
-  return operatorsArray[randomPosition];
-}
-function getRandomNumber(numbersArray: Array<number>) {
-  const randomPosition = getRandomIntInclusive(0, numbersArray.length);
-  return numbersArray[randomPosition];
-}
-
-function getAnswer(op: string, firstNumber: number, secondNumber: number) {
-  let answer = 0;
-  if (op === "+") answer = firstNumber + secondNumber;
-  if (op === "-") answer = firstNumber - secondNumber;
-  if (op === "*") answer = firstNumber * secondNumber;
-  if (op === "/") answer = firstNumber / secondNumber;
-
-  return answer;
-}
-
-function questionGenerator(
-  operators: Array<mathOperators>,
-  nums: Array<number>
-): responseJSON {
-  const operator = getRandomOperator(operators);
-  const firstNumber = getRandomNumber(nums);
-  let secondNumber = getRandomNumber(nums);
-
-  while (
-    (operator === "/" && secondNumber === 0) ||
-    (secondNumber > firstNumber && firstNumber !== 0)
-  ) {
-    secondNumber = getRandomNumber(nums);
+async function shuffleArray(array: PossibleAnswer[]) {
+  for (var i = array.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
   }
-
-  const answer = getAnswer(operator, firstNumber, secondNumber);
-
-  return {
-    first_number: firstNumber,
-    second_number: secondNumber,
-    operator: operator,
-    question: `${firstNumber} ${operator} ${secondNumber}`,
-    answer: answer,
-  };
 }
 
-const getPossibleWrongAnswers = (answer: number) => {
-  // creating the range for the players to get wrong with the answer...
-  const min = answer - 20;
-  const max = answer + 20;
+const round = (n: number, dp: number) => {
+  const h = +"1".padEnd(dp + 1, "0"); // 10 or 100 or 1000 or etc
+  return Math.round(n * h) / h;
+};
+
+const randomNumber = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const getRandomArithmeticQuestion = () => {
-  const data = questionGenerator(operators, numbers);
-  const firstPossibleAnswer =
-    Math.round(getPossibleWrongAnswers(data.answer) * 100) / 100;
-  const secondPossibleAnswer =
-    Math.round(getPossibleWrongAnswers(data.answer) * 100) / 100;
-  let possibleAnswers = [
-    { id: 0, num: Math.round(data.answer * 100) / 100 },
-    { id: 1, num: firstPossibleAnswer },
-    { id: 2, num: secondPossibleAnswer },
-  ];
-  const possibleShuffleAnswers = possibleAnswers
-    .map((value) => ({ value, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value);
-  const question = {
-    ...data,
-    possibleAnswers: possibleShuffleAnswers,
-  };
+const generateRandomQuestion = async () => {
+  let isValid = false;
+  let question: FirstStepResult | undefined;
+  while (!isValid) {
+    const first = randomNumber(10, 40);
+    const second = randomNumber(0, 10);
+
+    // result for + - * /
+    const sum = first + second;
+    const sub = first - second;
+    const multiply = first * second;
+    const division = first / second;
+
+    // create an array to be picked randomly
+    const firstStepResults: FirstStepResult[] = [
+      {
+        sign: "+",
+        first,
+        second,
+        answer: sum,
+      },
+      {
+        sign: "-",
+        first,
+        second,
+        answer: sub,
+      },
+      {
+        sign: "*",
+        first,
+        second,
+        answer: multiply,
+      },
+      {
+        sign: "/",
+        first,
+        second,
+        answer: division,
+      },
+    ];
+
+    // get Random Element from firstStepResults
+    const randomQuestion: FirstStepResult =
+      firstStepResults[Math.floor(Math.random() * firstStepResults.length)];
+
+    const { answer } = randomQuestion;
+
+    if (answer !== 0) {
+      question = randomQuestion;
+      isValid = true;
+    }
+  }
   return question;
+};
+
+const getDifferentPossibleAnswers = async (answer: number) => {
+  // range for possible answers
+  const min = answer - 5;
+  const max = answer + 5;
+
+  let firstPossibleAnswer = randomNumber(min, max);
+  let secondPossibleAnswer = randomNumber(min, max);
+
+  // getting the different options : possible answers
+  let isAnswerSame = true;
+  if (
+    firstPossibleAnswer !== secondPossibleAnswer &&
+    firstPossibleAnswer !== answer &&
+    secondPossibleAnswer !== answer
+  ) {
+    isAnswerSame = false;
+    const possibleAnswers: PossibleAnswer[] = [
+      { id: 1, answer: round(firstPossibleAnswer, 3), isCorrect: false },
+      { id: 2, answer: round(secondPossibleAnswer, 3), isCorrect: false },
+      { id: 3, answer: round(answer, 3), isCorrect: true },
+    ];
+    return possibleAnswers;
+  }
+  while (isAnswerSame) {
+    const first = randomNumber(min, max);
+    const second = randomNumber(min, max);
+    if (first !== second && first !== answer && second !== answer) {
+      firstPossibleAnswer = first;
+      secondPossibleAnswer = second;
+      isAnswerSame = false;
+    }
+  }
+  const possibleAnswers: PossibleAnswer[] = [
+    { id: 1, answer: round(firstPossibleAnswer, 3), isCorrect: false },
+    { id: 2, answer: round(secondPossibleAnswer, 3), isCorrect: false },
+    { id: 3, answer: round(answer, 3), isCorrect: true },
+  ];
+  return possibleAnswers;
+};
+
+export const generateReadyQuestion = async () => {
+  const question = await generateRandomQuestion();
+  if (!question) return { error: "Something went wrong!" };
+
+  const { sign, first, second, answer } = question;
+
+  const possibleAnswers = await getDifferentPossibleAnswers(answer);
+
+  await shuffleArray(possibleAnswers);
+
+  const questionString = `${first} ${sign} ${second}`;
+
+  const readyMadeQuestion: Question = {
+    sign,
+    first_number: first,
+    second_number: second,
+    question: questionString,
+    possibleAnswers,
+  };
+  return readyMadeQuestion;
 };
